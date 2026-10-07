@@ -321,19 +321,30 @@ function App() {
         }
       );
 
-      const data = await response.json();
+      const texto = await response.text();
 
-      if (!response.ok) {
-        throw new Error(
-          data.erro ||
-            "Não foi possível solicitar a recuperação."
-        );
-      }
+let data: any = {};
 
-      setMensagemRecuperacao(
-        data.mensagem ||
-          "Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha."
-      );
+if (texto) {
+  try {
+    data = JSON.parse(texto);
+  } catch {
+    data = {};
+  }
+}
+
+if (!response.ok) {
+  throw new Error(
+    data.erro ||
+      "Não foi possível solicitar a recuperação."
+  );
+}
+
+setMensagemRecuperacao(
+  data.mensagem ||
+    "Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha."
+);
+
     } catch (error) {
       if (error instanceof Error) {
         setErroRecuperacao(
@@ -396,7 +407,17 @@ function App() {
         }
       );
 
-      const data = await response.json();
+const texto = await response.text();
+
+let data: any = {};
+
+if (texto) {
+  try {
+    data = JSON.parse(texto);
+  } catch {
+    data = {};
+  }
+}
 
       if (!response.ok) {
         throw new Error(
